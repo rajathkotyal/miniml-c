@@ -96,8 +96,8 @@ def main():
 #SPLITTING DATASET
     @st.cache(persist=True)
     def split(df):
-        y=df.Outcome.astype(float)
-        x=df.drop(columns=['Outcome']).astype(float)
+        y=df.Outcome
+        x=df.drop(columns=['Outcome'])
         x_train, x_test,y_train,y_test = train_test_split(x,y,test_size=0.25)
         return x_train, x_test,y_train,y_test
         st.write(df)
