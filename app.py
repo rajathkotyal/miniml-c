@@ -60,7 +60,7 @@ def main():
 
 
 #LOADING FILE.
-    @st.cache_data(persist = True)
+    
     def sample_load_data():
         sample_data = pd.read_csv('sampleDiabetes.csv')
         return sample_data
@@ -94,7 +94,7 @@ def main():
     #st.text('[ If u see a red error box below. Please upload the CSV file with the proper format ]')
 #ASSIGNING FEATURES X AND OUTPUT VECTOR Y
 #SPLITTING DATASET
-    @st.cache_data(persist=True)
+    
     def split(df):
         y=df.Outcome.astype(float)
         x=df.drop(columns=['Outcome']).astype(float)
