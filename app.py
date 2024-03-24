@@ -24,7 +24,7 @@ from sklearn.svm import SVC
 from sklearn.linear_model import LogisticRegression
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import plot_confusion_matrix, plot_roc_curve, plot_precision_recall_curve
+from sklearn.metrics import ConfusionMatrixDisplay, roc_curve, precision_recall_curve
 from sklearn.metrics import precision_score, recall_score
 from PIL import Image
 from sklearn.naive_bayes import GaussianNB
@@ -60,7 +60,7 @@ def main():
 
 
 #LOADING FILE.
-    @st.cache(persist = True)
+    @st.cache_data(persist = True)
     def sample_load_data():
         sample_data = pd.read_csv('sampleDiabetes.csv')
         return sample_data
@@ -94,10 +94,10 @@ def main():
     #st.text('[ If u see a red error box below. Please upload the CSV file with the proper format ]')
 #ASSIGNING FEATURES X AND OUTPUT VECTOR Y
 #SPLITTING DATASET
-    @st.cache(persist=True)
+    @st.cache_data(persist=True)
     def split(df):
-        y=df.Outcome
-        x=df.drop(columns=['Outcome'])
+        y=df.Outcome.astype(float)
+        x=df.drop(columns=['Outcome']).astype(float)
         x_train, x_test,y_train,y_test = train_test_split(x,y,test_size=0.25)
         return x_train, x_test,y_train,y_test
         st.write(df)
@@ -111,20 +111,20 @@ def main():
     def plot_metrics(metrics_list):
         if 'Confusion Matrix' in metrics_list:
             st.subheader("Confusion Matrix :")
-            plot_confusion_matrix(model, x_test,y_test,display_labels = class_names)
+            ConfusionMatrixDisplay(model, x_test,y_test,display_labels = class_names)
             st.pyplot()
             st.markdown('[Click me to know more about Confusion Matrices](https://towardsdatascience.com/understanding-confusion-matrix-a9ad42dcfd62)')
 
         if 'ROC Curve' in metrics_list:
             st.subheader("ROC curve :")
-            plot_roc_curve(model, x_test,y_test)
+            roc_curve(model, x_test,y_test)
             st.pyplot()
             st.text('AUC - Area Under Curve -> Higher the better Accuracy')
             st.markdown('[Click me to know more about ROC & AUC](https://towardsdatascience.com/understanding-auc-roc-curve-68b2303cc9c5)')
 
         if 'Precision Recall Curve' in metrics_list:
             st.subheader("Precision Recall Curve:")
-            plot_precision_recall_curve(model, x_test,y_test)
+            precision_recall_curve(model, x_test,y_test)
             st.pyplot()
             st.text('AP - Average Precision')
             st.markdown('[Click me to know more about Precision Recall Curve](https://www.geeksforgeeks.org/precision-recall-curve-ml/)')
