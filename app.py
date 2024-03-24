@@ -32,6 +32,46 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn.linear_model import SGDClassifier
 
 
+ms = st.session_state
+if "themes" not in ms: 
+  ms.themes = {"current_theme": "light",
+                    "refreshed": True,
+                    
+                    "light": {"theme.base": "dark",
+                              "theme.backgroundColor": "black",
+                              "theme.primaryColor": "#c98bdb",
+                              "theme.secondaryBackgroundColor": "#5591f5",
+                              "theme.textColor": "white",
+                              "theme.textColor": "white",
+                              "button_face": "🌜"},
+
+                    "dark":  {"theme.base": "light",
+                              "theme.backgroundColor": "white",
+                              "theme.primaryColor": "#5591f5",
+                              "theme.secondaryBackgroundColor": "#82E1D7",
+                              "theme.textColor": "#0a1464",
+                              "button_face": "🌞"},
+                    }
+  
+
+def ChangeTheme():
+  previous_theme = ms.themes["current_theme"]
+  tdict = ms.themes["light"] if ms.themes["current_theme"] == "light" else ms.themes["dark"]
+  for vkey, vval in tdict.items(): 
+    if vkey.startswith("theme"): st._config.set_option(vkey, vval)
+
+  ms.themes["refreshed"] = False
+  if previous_theme == "dark": ms.themes["current_theme"] = "light"
+  elif previous_theme == "light": ms.themes["current_theme"] = "dark"
+
+
+btn_face = ms.themes["light"]["button_face"] if ms.themes["current_theme"] == "light" else ms.themes["dark"]["button_face"]
+st.button(btn_face, on_click=ChangeTheme)
+
+if ms.themes["refreshed"] == False:
+  ms.themes["refreshed"] = True
+  st.rerun()
+
 def local_css():
     with open(file_name) as f:
         st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
@@ -100,11 +140,7 @@ def main():
         x=df.drop(columns=['Outcome']).astype(float)
         x_train, x_test,y_train,y_test = train_test_split(x,y,test_size=0.25)
         return x_train, x_test,y_train,y_test
-        st.write(df)
-        from sklearn.impute import SimpleImputer
-        imputer = SimpleImputer(missing_values = np.nan , strategy = 'mean')
-        imputer.fit(x) # 1:3 . 3 excluded.
-        x = imputer.transform(x)
+        
 
 
 #PLOTTING MATRICES
