@@ -93,7 +93,7 @@ def main():
     st.image(image, width = 270)
     st.markdown("- where X are the **features** & Outcome is the Output **Vector Y** Containing values 0 or 1 ")
     st.markdown("2. Make sure all the values are **Integer/Float** & there are **NO** missing values.")
-    st.markdown("__Sample dataset__ is provided below 🍻")
+    st.markdown("__Sample dataset__ is provided below!! 🍻")
 
 
     uploaded_file = st.file_uploader("Upload the CSV to continue", type="csv")
