@@ -87,13 +87,13 @@ def main():
     image = Image.open('mini.png')
     st.sidebar.image(image, width = 150)
     st.sidebar.markdown("# Hey There!! ✌️")
-    st.header("Choose the Best Classification Model for your Dataset.")
-    st.markdown("1. Upload your Classifier Dataset with the below format. ")
+    st.header("Choose the Best Classification Model for your Dataset")
+    st.markdown("1. Upload your Classifier Dataset with the below format ")
     # image = Image.open('table.png')
     st.image(image, width = 270)
     st.markdown("- where X are the **features** & Outcome is the Output **Vector Y** Containing values 0 or 1 ")
     st.markdown("2. Make sure all the values are **Integer/Float** & there are **NO** missing values.")
-    st.markdown("__Sample dataset__ is provided below!! 🍻")
+    st.markdown("__Sample dataset__ is provided below 🍻")
 
 
     uploaded_file = st.file_uploader("Upload the CSV to continue", type="csv")
@@ -147,32 +147,20 @@ def main():
     def plot_metrics(metrics_list):
         if 'Confusion Matrix' in metrics_list:
             st.subheader("Confusion Matrix :")
-            ConfusionMatrixDisplay.from_estimator(model, x_test, y_test, display_labels=class_names)
+            ConfusionMatrixDisplay(model, x_test,y_test,display_labels = class_names)
             st.pyplot()
             st.markdown('[Click me to know more about Confusion Matrices](https://towardsdatascience.com/understanding-confusion-matrix-a9ad42dcfd62)')
-    
+
         if 'ROC Curve' in metrics_list:
             st.subheader("ROC curve :")
-            y_pred_prob = model.predict_proba(x_test)[:, 1]  # Get the predicted probabilities for the positive class
-            fpr, tpr, thresholds = roc_curve(y_test, y_pred_prob)
-            # Plot the ROC curve
-            plt.plot(fpr, tpr)
-            plt.xlabel('False Positive Rate')
-            plt.ylabel('True Positive Rate')
-            plt.title('ROC Curve')
+            roc_curve(model, x_test,y_test)
             st.pyplot()
             st.text('AUC - Area Under Curve -> Higher the better Accuracy')
             st.markdown('[Click me to know more about ROC & AUC](https://towardsdatascience.com/understanding-auc-roc-curve-68b2303cc9c5)')
-    
+
         if 'Precision Recall Curve' in metrics_list:
             st.subheader("Precision Recall Curve:")
-            y_pred_prob = model.predict_proba(x_test)[:, 1]  # Get the predicted probabilities for the positive class
-            precision, recall, thresholds = precision_recall_curve(y_test, y_pred_prob)
-            # Plot the Precision-Recall curve
-            plt.plot(recall, precision)
-            plt.xlabel('Recall')
-            plt.ylabel('Precision')
-            plt.title('Precision-Recall Curve')
+            precision_recall_curve(model, x_test,y_test)
             st.pyplot()
             st.text('AP - Average Precision')
             st.markdown('[Click me to know more about Precision Recall Curve](https://www.geeksforgeeks.org/precision-recall-curve-ml/)')
