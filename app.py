@@ -147,20 +147,32 @@ def main():
     def plot_metrics(metrics_list):
         if 'Confusion Matrix' in metrics_list:
             st.subheader("Confusion Matrix :")
-            ConfusionMatrixDisplay(model, x_test,y_test,display_labels = class_names)
+            ConfusionMatrixDisplay.from_estimator(model, x_test, y_test, display_labels=class_names)
             st.pyplot()
             st.markdown('[Click me to know more about Confusion Matrices](https://towardsdatascience.com/understanding-confusion-matrix-a9ad42dcfd62)')
-
+    
         if 'ROC Curve' in metrics_list:
             st.subheader("ROC curve :")
-            roc_curve(model, x_test,y_test)
+            y_pred_prob = model.predict_proba(x_test)[:, 1]  # Get the predicted probabilities for the positive class
+            fpr, tpr, thresholds = roc_curve(y_test, y_pred_prob)
+            # Plot the ROC curve
+            plt.plot(fpr, tpr)
+            plt.xlabel('False Positive Rate')
+            plt.ylabel('True Positive Rate')
+            plt.title('ROC Curve')
             st.pyplot()
             st.text('AUC - Area Under Curve -> Higher the better Accuracy')
             st.markdown('[Click me to know more about ROC & AUC](https://towardsdatascience.com/understanding-auc-roc-curve-68b2303cc9c5)')
-
+    
         if 'Precision Recall Curve' in metrics_list:
             st.subheader("Precision Recall Curve:")
-            precision_recall_curve(model, x_test,y_test)
+            y_pred_prob = model.predict_proba(x_test)[:, 1]  # Get the predicted probabilities for the positive class
+            precision, recall, thresholds = precision_recall_curve(y_test, y_pred_prob)
+            # Plot the Precision-Recall curve
+            plt.plot(recall, precision)
+            plt.xlabel('Recall')
+            plt.ylabel('Precision')
+            plt.title('Precision-Recall Curve')
             st.pyplot()
             st.text('AP - Average Precision')
             st.markdown('[Click me to know more about Precision Recall Curve](https://www.geeksforgeeks.org/precision-recall-curve-ml/)')
